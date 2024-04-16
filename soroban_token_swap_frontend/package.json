@@ -47,34 +47,7 @@
     "stream-http": "^3.2.0",
     "styled-components": "^6.0.0-rc.6",
     "token-swap": "file:./token-swap/",
-    "url": "^0.11.1"
-  },
-  "scripts": {
-    "install-if-package-changed": "git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD | grep --quiet yarn.lock && yarn install || exit 0",
-    "start": "webpack serve --open --config webpack.dev.js",
-    "build": "NODE_ENV=production webpack --config webpack.prod.js",
-    "prod:build": "docker image build --build-arg AMPLITUDE_KEY=$AMPLITUDE_KEY -t account-viewer-next:localbuild .",
-    "prod:serve": "docker run -p 8000:80 account-viewer-next:localbuild",
-    "production": "yarn prod:build && yarn prod:serve",
-    "prepare": "husky install",
-    "pre-commit": "concurrently 'pretty-quick --staged' 'lint-staged' 'tsc --noEmit'"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "devDependencies": {
+    "url": "^0.11.1",
     "@babel/core": "^7.22.5",
     "@babel/preset-env": "^7.22.5",
     "@babel/preset-react": "^7.22.5",
@@ -137,5 +110,30 @@
     "webpack": "^5.88.0",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.1"
+  },
+  "scripts": {
+    "install-if-package-changed": "git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD | grep --quiet yarn.lock && yarn install || exit 0",
+    "start": "webpack serve --open --config webpack.dev.js",
+    "build": "NODE_ENV=production webpack --config webpack.prod.js",
+    "prod:build": "docker image build --build-arg AMPLITUDE_KEY=$AMPLITUDE_KEY -t account-viewer-next:localbuild .",
+    "prod:serve": "docker run -p 8000:80 account-viewer-next:localbuild",
+    "production": "yarn prod:build && yarn prod:serve",
+    "prepare": "husky install",
+    "pre-commit": "concurrently 'pretty-quick --staged' 'lint-staged' 'tsc --noEmit'"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
