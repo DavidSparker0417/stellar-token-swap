@@ -4,3 +4,4 @@ target/
 .soroban
 Cargo.lock
 node_modules/
+.env
