@@ -53,7 +53,7 @@ async function executeTransaction(accKeypair: StellarSdk.Keypair, operation: Ste
     const transaction = await server.prepareTransaction(transaction0);
     // transaction.sign(accKeypair);
     console.log(`[DAVID] Signing transaction for xdr:: ${transaction.hash().toString('hex')}`);
-    const signature = await freighter.signTransaction(transaction.hash().toString('hex'), {
+    const signature = await freighter.signTransaction(transaction.hash().toString('base64'), {
         networkPassphrase: StellarSdk.Networks.FUTURENET,
     });
     // const signature = "AAAAAgAAAACNj6RokCqI7lD9vPqDqSpSdRsWkBhz0JAmnYMOS5IQ+gACDVAAEUdSAAAAHQAAAAEAAAAAAAAAAAAAAABmH/8ZAAAAAQAAAAdUZXN0aW5nAAAAAAEAAAAAAAAAGAAAAAAAAAABhrqt6lL687vtrGqUgIbrDXsRagIgJoeoX740/8DpAV0AAAAHc2V0X2ZlZQAAAAACAAAAAwAAABkAAAASAAAAAAAAAADdHMMv9dP0nPm3npbOP1hK2e9LZj90+mupSpH46FPLgQAAAAAAAAABAAAAAAAAAAEAAAAH+giXrjInL8IwsaElhNDsibVZgVRqhbKcUXBMdjKQgA8AAAABAAAABgAAAAGGuq3qUvrzu+2sapSAhusNexFqAiAmh6hfvjT/wOkBXQAAABQAAAABAHWafQAAM2gAAAu8AAAAAAACDOwAAAABS5IQ+gAAAEAj7s6pKXrlQNxk5ciuMwq7nyWumikTqiJbn0o9rIgiR9tx0VLhVvuEwDlD5E5i8EBG1UtpirOpbJ3VSXpW6IAJ";
