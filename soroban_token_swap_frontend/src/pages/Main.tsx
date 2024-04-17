@@ -38,7 +38,7 @@ async function executeTransaction(operation: StellarSdk.xdr.Operation<StellarSdk
         .addMemo(StellarSdk.Memo.text("Testing"))
         .setTimeout(180)
         .build();
-
+    console.log(`[DAVID] executeTransaction on ${CONTRACT_ID} ...`);
     const transaction = await server.prepareTransaction(transaction0);
     // transaction.sign(accKeypair);
     const signedXDR = await freighter.signTransaction(transaction.toXDR(), {
