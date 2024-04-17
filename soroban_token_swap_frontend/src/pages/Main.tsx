@@ -58,7 +58,7 @@ async function executeTransaction(accKeypair: StellarSdk.Keypair, operation: Ste
         accountToSign: sourceAcc.accountId(),
     });
     console.log(`[DAVID] txSignature = ${atob(txHash)}`);
-    transaction.addSignature(sourceAcc.accountId(), txHash);
+    transaction.addSignature(sourceAcc.accountId(), atob(txHash));
     console.log(`[DAVID] txHash = ${txHash}`);
     try {
         const response = await server.sendTransaction(transaction);
