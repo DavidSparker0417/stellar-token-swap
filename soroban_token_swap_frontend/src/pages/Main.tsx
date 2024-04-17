@@ -44,21 +44,21 @@ async function executeTransaction(accKeypair: StellarSdk.Keypair, operation: Ste
     const sourceAcc = await server.getAccount(await freighter.getPublicKey());
     const transaction0 = new StellarSdk.TransactionBuilder(sourceAcc, {
         fee: StellarSdk.BASE_FEE,
-        networkPassphrase: /* SorobanClient.Networks.STANDALONE */ StellarSdk.Networks.FUTURENET,
+        networkPassphrase: StellarSdk.Networks.FUTURENET,
     }).addOperation(operation)
         .addMemo(StellarSdk.Memo.text("Testing"))
         .setTimeout(180)
         .build();
 
-    console.log(`[DAVID] account = ${JSON.stringify(sourceAcc.accountId())}`);
-    const transaction = await server.prepareTransaction(transaction0);
-    // transaction.sign(accKeypair);
-    const txHash = await freighter.signTransaction(transaction.toXDR(), {
+    const txHash = await freighter.signTransaction(transaction0.toXDR(), {
         network: "STANDALONE",
-        networkPassphrase: tswap.networks.futurenet.networkPassphrase,
+        networkPassphrase: StellarSdk.Networks.FUTURENET,
         accountToSign: sourceAcc.accountId(),
     });
-    transaction.addSignature(sourceAcc.accountId(), txHash);
+    console.log(`[DAVID] txSignature = ${JSON.stringify(txHash)}`);
+    transaction0.addSignature(sourceAcc.accountId(), txHash);
+    const transaction = await server.prepareTransaction(transaction0);
+    // transaction.sign(accKeypair);
     console.log(`[DAVID] txHash = ${txHash}`);
     try {
         const response = await server.sendTransaction(transaction);
