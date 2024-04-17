@@ -3,6 +3,11 @@ use crate::storage_types::{ FEE_DECIMALS, /* INSTANCE_LIFETIME_THRESHOLD, INSTAN
     DataKey, FeeInfo
 };
 
+use crate::admin::{ 
+    has_administrator, 
+    read_administrator, 
+    write_administrator 
+};
 
 pub fn fee_check(e: &Env) -> bool {
     let key = DataKey::FEE;
@@ -27,7 +32,8 @@ pub fn fee_get(e: &Env) -> FeeInfo {
 
 pub fn fee_set(e: &Env, fee_info: &FeeInfo) {
     let key = DataKey::FEE;
-
+    let admin = read_administrator(&e);
+    admin.require_auth();
     e.storage().instance().set(&key, fee_info);
     // e.storage().instance().bump(INSTANCE_LIFETIME_THRESHOLD, INSTANCE_BUMP_AMOUNT);
 }
