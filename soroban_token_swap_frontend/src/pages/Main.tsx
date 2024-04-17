@@ -27,20 +27,7 @@ const server = new StellarSdk.SorobanRpc.Server(
     rpc,
 );
 
-const adminSecretKey = 'SBUXJ2P2KBPCTRZELFH6RY3DTR4KR6KRRXCJLC5QQOYGU26DGGTHAWBB';
-const offerorSecretKey = 'SAAHOJHIKMKYBS6ISCNQIEVCFBGV2KRV3PKIZUW72DLJTFLS2QOYY7WY';
-const acceptorSecretKey = 'SCXSDHS62AGA43FW65UHOHB32S7AD4DEC2RHRSQ7A55MLKSRYTZVXGC4';
-const feeSecretKey = 'SBWY3W7P365GIACG2MX3LD5OKU6UY3VEGPDOZWEFTIXKA4IKT6ZQEU64';
-
-const adminKeypair = StellarSdk.Keypair.fromSecret(adminSecretKey);
-const offerorKeypair = StellarSdk.Keypair.fromSecret(offerorSecretKey);
-const acceptorKeypair = StellarSdk.Keypair.fromSecret(acceptorSecretKey);
-const feeKeypair = StellarSdk.Keypair.fromSecret(feeSecretKey);
-
-
-async function executeTransaction(accKeypair: StellarSdk.Keypair, operation: StellarSdk.xdr.Operation<StellarSdk.Operation.InvokeHostFunction>): Promise<number> {
-    // const sourceAcc = await server.getAccount(accKeypair.publicKey());
-    console.log(`[DAVID] executeTransaction:: ACC-KEYPAIRE=${accKeypair}`);
+async function executeTransaction(operation: StellarSdk.xdr.Operation<StellarSdk.Operation.InvokeHostFunction>): Promise<number> {
     const sourceAcc = await server.getAccount(await freighter.getPublicKey());
     const transaction0 = new StellarSdk.TransactionBuilder(sourceAcc, {
         fee: StellarSdk.BASE_FEE,
@@ -144,13 +131,10 @@ function Main() {
             }} />
             <button onClick={async () => {
                 const contract = new StellarSdk.Contract(CONTRACT_ID);
-                console.log(`[DAVID] ${feeKeypair.xdrPublicKey()}`);
-                const res = await executeTransaction(adminKeypair,
+                const res = await executeTransaction(
                     contract.call("set_fee",
                         StellarSdk.xdr.ScVal.scvU32(fee * 100),
-                        // StellarSdk.xdr.ScVal.scvAddress(StellarSdk.Address.fromString("GDORZQZP6XJ7JHHZW6PJNTR7LBFNT32LMY7XJ6TLVFFJD6HIKPFYCPTD").toScAddress()),
-                        StellarSdk.Address.fromString("GDORZQZP6XJ7JHHZW6PJNTR7LBFNT32LMY7XJ6TLVFFJD6HIKPFYCPTD").toScVal(),
-                        // StellarSdk.xdr.ScVal.scvAddress(SorobanClient.xdr.ScAddress.scAddressTypeAccount(feeKeypair.xdrPublicKey())),
+                        StellarSdk.Address.fromString(await freighter.getPublicKey()).toScVal(),
                     ));
                 console.log('result:', res);
             }}> Set Fee </button>
@@ -165,8 +149,7 @@ function Main() {
             <button onClick={async () => {
                 const contract = new StellarSdk.Contract(CONTRACT_ID);
 
-                const res = await executeTransaction(adminKeypair,
-                    contract.call('allow_token',
+                const res = await executeTransaction(contract.call('allow_token',
                         new StellarSdk.Address(tokenId).toScVal(),
                     ));
                 console.log('result:', res);
@@ -174,8 +157,7 @@ function Main() {
             <button onClick={async () => {
                 const contract = new StellarSdk.Contract(CONTRACT_ID);
 
-                const res = await executeTransaction(adminKeypair,
-                    contract.call('disallow_token',
+                const res = await executeTransaction(contract.call('disallow_token',
                         StellarSdk.xdr.ScVal.scvAddress(StellarSdk.Address.fromString(tokenId).toScAddress()),
                     ));
                 console.log('result:', res);
@@ -251,9 +233,9 @@ function Main() {
                 // }
 
                 const contract = new StellarSdk.Contract(CONTRACT_ID);
-                const res = await executeTransaction(offerorKeypair,
+                const res = await executeTransaction(
                     contract.call('create_offer',
-                        StellarSdk.xdr.ScVal.scvAddress(StellarSdk.xdr.ScAddress.scAddressTypeAccount(offerorKeypair.xdrPublicKey())),
+                        StellarSdk.xdr.ScVal.scvAddress(StellarSdk.Address.fromString(await freighter.getPublicKey()).toScAddress()),
                         StellarSdk.xdr.ScVal.scvAddress(StellarSdk.Address.fromString(offeredToken).toScAddress()),
                         StellarSdk.xdr.ScVal.scvAddress(StellarSdk.Address.fromString(requestedToken).toScAddress()),
                         StellarSdk.xdr.ScVal.scvU32(/* Date.now() */ 1000),
@@ -330,9 +312,9 @@ function Main() {
                 // }
 
                 const contract = new StellarSdk.Contract(CONTRACT_ID);
-                const res = await executeTransaction(offerorKeypair,
+                const res = await executeTransaction(
                     contract.call('update_offer',
-                        StellarSdk.xdr.ScVal.scvAddress(StellarSdk.xdr.ScAddress.scAddressTypeAccount(offerorKeypair.xdrPublicKey())),
+                        StellarSdk.xdr.ScVal.scvAddress(StellarSdk.Address.fromString(await freighter.getPublicKey()).toScAddress()),
                         StellarSdk.xdr.ScVal.scvU32(offerId),
                         StellarSdk.xdr.ScVal.scvU64(new StellarSdk.xdr.Uint64(newRequestedTokenAmount)),
                         StellarSdk.xdr.ScVal.scvU64(new StellarSdk.xdr.Uint64(newMinRequestedTokenAmount)),
@@ -361,9 +343,9 @@ function Main() {
                 // }
 
                 const contract = new StellarSdk.Contract(CONTRACT_ID);
-                const res = await executeTransaction(offerorKeypair,
+                const res = await executeTransaction(
                     contract.call('close_offer',
-                        StellarSdk.xdr.ScVal.scvAddress(StellarSdk.xdr.ScAddress.scAddressTypeAccount(offerorKeypair.xdrPublicKey())),
+                        StellarSdk.xdr.ScVal.scvAddress(StellarSdk.Address.fromString(await freighter.getPublicKey()).toScAddress()),
                         StellarSdk.xdr.ScVal.scvU32(offerId),
                     ),
                 );
@@ -418,9 +400,9 @@ function Main() {
                 // }
 
                 const contract = new StellarSdk.Contract(CONTRACT_ID);
-                const res = await executeTransaction(acceptorKeypair,
+                const res = await executeTransaction(
                     contract.call('accept_offer',
-                        StellarSdk.xdr.ScVal.scvAddress(StellarSdk.xdr.ScAddress.scAddressTypeAccount(acceptorKeypair.xdrPublicKey())),
+                        StellarSdk.xdr.ScVal.scvAddress(StellarSdk.Address.fromString(await freighter.getPublicKey()).toScAddress()),
                         StellarSdk.xdr.ScVal.scvU32(offerId),
                         StellarSdk.xdr.ScVal.scvU64(new StellarSdk.xdr.Uint64(amount)),
                     ),
@@ -445,34 +427,12 @@ function Main() {
 
             <button onClick={async () => {
                 try {
-                    let balances = await tokenSwap.checkBalances({
-                        account: offerorKeypair.publicKey(),
+                    const balances = await tokenSwap.checkBalances({
+                        account: await freighter.getPublicKey(),
                         send_token: offeredToken,
                         recv_token: requestedToken,
                     });
-                    console.log(`[DAVID] offeror = ${balances.result}`);
-                    balances = await tokenSwap.checkBalances({
-                        account: acceptorKeypair.publicKey(),
-                        send_token: offeredToken,
-                        recv_token: requestedToken,
-                    });
-                    console.log(`[DAVID] acceptor = ${balances.result}`);
-                    balances = await tokenSwap.checkBalances({
-                        account: feeKeypair.publicKey(),
-                        send_token: offeredToken,
-                        recv_token: requestedToken,
-                    });
-                    console.log(`[DAVID] fee_acc = ${balances.result}`);
-                    // const [stkn1, rtkn1, stkn2, rtkn2] = await tokenSwap.checkBalances({
-                    //     offeror: offerorKeypair.publicKey(),
-                    //     acceptor: acceptorKeypair.publicKey(),
-                    //     send_token: offeredToken,
-                    //     recv_token: requestedToken,
-                    // });
-                    // console.log("Offeror's balance of Offered Token:", stkn1);
-                    // console.log("Offeror's balance of Requested Token:", rtkn1);
-                    // console.log("Acceptor's balance of Offered Token:", stkn2);
-                    // console.log("Acceptor's balance of Requested Token:", rtkn2);
+                    console.log(`Balance = ${balances.result}`);
                 } catch (err) {
                     console.error(err);
                 }
