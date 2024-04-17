@@ -58,7 +58,7 @@ async function executeTransaction(accKeypair: StellarSdk.Keypair, operation: Ste
         networkPassphrase: tswap.networks.futurenet.networkPassphrase,
         accountToSign: sourceAcc.accountId(),
     });
-    transaction.addSignature(sourceAcc.accountId(), txHash)
+    transaction.addSignature(sourceAcc.accountId(), txHash);
     console.log(`[DAVID] txHash = ${txHash}`);
     try {
         const response = await server.sendTransaction(transaction);
