@@ -118,7 +118,6 @@
     "prod:build": "docker image build --build-arg AMPLITUDE_KEY=$AMPLITUDE_KEY -t account-viewer-next:localbuild .",
     "prod:serve": "docker run -p 8000:80 account-viewer-next:localbuild",
     "production": "yarn prod:build && yarn prod:serve",
-    "prepare": "husky install",
     "pre-commit": "concurrently 'pretty-quick --staged' 'lint-staged' 'tsc --noEmit'"
   },
   "eslintConfig": {

@@ -1,9 +1,9 @@
 import { useState } from "react";
 import './Main.css';
 // import { Connectivity, EditOfferInput } from './connectivity';
-import * as tswap from "token-swap";
 import * as StellarSdk from "@stellar/stellar-sdk";
 import freighter from "@stellar/freighter-api";
+import * as tswap from "token-swap";
 
 // working around ESM compatibility issues
 // const {
