@@ -46,13 +46,13 @@ async function executeTransaction(accKeypair: StellarSdk.Keypair, operation: Ste
         fee: StellarSdk.BASE_FEE,
         networkPassphrase: StellarSdk.Networks.FUTURENET,
     }).addOperation(operation)
-        // .addMemo(StellarSdk.Memo.text("Testing"))
+        .addMemo(StellarSdk.Memo.text("Testing"))
         .setTimeout(180)
         .build();
 
-    // const transaction = await server.prepareTransaction(transaction0);
-    const transaction = transaction0;
+    const transaction = await server.prepareTransaction(transaction0);
     // transaction.sign(accKeypair);
+    console.log(`[DAVID] Signing transaction for xdr:: ${transaction.toXDR()}`);
     const txHash = await freighter.signTransaction(transaction.toXDR(), {
         networkPassphrase: StellarSdk.Networks.FUTURENET,
     });
