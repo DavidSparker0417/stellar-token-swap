@@ -117,7 +117,7 @@ timestamp: u32;
 /**
     
     */
-export type DataKey = {tag: "FEE", values: void} | {tag: "Allowance", values: readonly [string]} | {tag: "OfferCount", values: void} | {tag: "RegOffers", values: readonly [u32]} | {tag: "ErrorCode", values: void};
+export type DataKey = {tag: "FEE", values: void} | {tag: "Allowance", values: readonly [string]} | {tag: "OfferCount", values: void} | {tag: "RegOffers", values: readonly [u32]} | {tag: "ErrorCode", values: void} | {tag: "Admin", values: void};
 
 /**
     
@@ -134,7 +134,9 @@ export class Contract {
         "AAAAAwAAAAAAAAAAAAAAC09mZmVyU3RhdHVzAAAAAAQAAAAAAAAABElOSVQAAAAAAAAAAAAAAAZBQ1RJVkUAAAAAAAEAAAAAAAAACENPTVBMRVRFAAAAAgAAAAAAAAAGQ0FOQ0VMAAAAAAAD",
         "AAAAAQAAAAAAAAAAAAAACU9mZmVySW5mbwAAAAAAAAcAAAAAAAAAD21pbl9yZWN2X2Ftb3VudAAAAAAGAAAAAAAAAAdvZmZlcm9yAAAAABMAAAAAAAAAC3JlY3ZfYW1vdW50AAAAAAYAAAAAAAAACnJlY3ZfdG9rZW4AAAAAABMAAAAAAAAAC3NlbmRfYW1vdW50AAAAAAYAAAAAAAAACnNlbmRfdG9rZW4AAAAAABMAAAAAAAAABnN0YXR1cwAAAAAH0AAAAAtPZmZlclN0YXR1cwA=",
         "AAAAAQAAAAAAAAAAAAAACE9mZmVyS2V5AAAABAAAAAAAAAAHb2ZmZXJvcgAAAAATAAAAAAAAAApyZWN2X3Rva2VuAAAAAAATAAAAAAAAAApzZW5kX3Rva2VuAAAAAAATAAAAAAAAAAl0aW1lc3RhbXAAAAAAAAAE",
-        "AAAAAgAAAAAAAAAAAAAAB0RhdGFLZXkAAAAABQAAAAAAAAAAAAAAA0ZFRQAAAAABAAAAAAAAAAlBbGxvd2FuY2UAAAAAAAABAAAAEwAAAAAAAAAAAAAACk9mZmVyQ291bnQAAAAAAAEAAAAAAAAACVJlZ09mZmVycwAAAAAAAAEAAAAEAAAAAAAAAAAAAAAJRXJyb3JDb2RlAAAA",
+        "AAAAAgAAAAAAAAAAAAAAB0RhdGFLZXkAAAAABgAAAAAAAAAAAAAAA0ZFRQAAAAABAAAAAAAAAAlBbGxvd2FuY2UAAAAAAAABAAAAEwAAAAAAAAAAAAAACk9mZmVyQ291bnQAAAAAAAEAAAAAAAAACVJlZ09mZmVycwAAAAAAAAEAAAAEAAAAAAAAAAAAAAAJRXJyb3JDb2RlAAAAAAAAAAAAAAAAAAAFQWRtaW4AAAA=",
+        "AAAAAAAAAAAAAAAKaW5pdGlhbGl6ZQAAAAAAAQAAAAAAAAAFYWRtaW4AAAAAAAATAAAAAA==",
+        "AAAAAAAAAAAAAAAJc2V0X2FkbWluAAAAAAAAAQAAAAAAAAAJbmV3X2FkbWluAAAAAAAAEwAAAAA=",
         "AAAAAAAAAAAAAAAHc2V0X2ZlZQAAAAACAAAAAAAAAAhmZWVfcmF0ZQAAAAQAAAAAAAAACmZlZV93YWxsZXQAAAAAABMAAAAA",
         "AAAAAAAAAAAAAAAHZ2V0X2ZlZQAAAAAAAAAAAQAAA+0AAAACAAAABAAAABM=",
         "AAAAAAAAAAAAAAALYWxsb3dfdG9rZW4AAAAAAQAAAAAAAAAFdG9rZW4AAAAAAAATAAAAAA==",
@@ -150,6 +152,8 @@ export class Contract {
         ]);
     }
     private readonly parsers = {
+        initialize: () => {},
+        setAdmin: () => {},
         setFee: () => {},
         getFee: (result: XDR_BASE64): readonly [u32, string] => this.spec.funcResToNative("get_fee", result),
         allowToken: () => {},
@@ -175,6 +179,8 @@ export class Contract {
         );
     }
     public readonly fromJSON = {
+        initialize: this.txFromJSON<ReturnType<typeof this.parsers['initialize']>>,
+        setAdmin: this.txFromJSON<ReturnType<typeof this.parsers['setAdmin']>>,
         setFee: this.txFromJSON<ReturnType<typeof this.parsers['setFee']>>,
         getFee: this.txFromJSON<ReturnType<typeof this.parsers['getFee']>>,
         allowToken: this.txFromJSON<ReturnType<typeof this.parsers['allowToken']>>,
@@ -188,6 +194,46 @@ export class Contract {
         loadOffer: this.txFromJSON<ReturnType<typeof this.parsers['loadOffer']>>,
         checkBalances: this.txFromJSON<ReturnType<typeof this.parsers['checkBalances']>>
     }
+        /**
+    * Construct and simulate a initialize transaction. Returns an `AssembledTransaction` object which will have a `result` field containing the result of the simulation. If this transaction changes contract state, you will need to call `signAndSend()` on the returned object.
+    */
+    initialize = async ({admin}: {admin: string}, options: {
+        /**
+         * The fee to pay for the transaction. Default: 100.
+         */
+        fee?: number,
+    } = {}) => {
+        return await AssembledTransaction.fromSimulation({
+            method: 'initialize',
+            args: this.spec.funcArgsToScVals("initialize", {admin: new Address(admin)}),
+            ...options,
+            ...this.options,
+            errorTypes: Errors,
+            parseResultXdr: this.parsers['initialize'],
+        });
+    }
+
+
+        /**
+    * Construct and simulate a set_admin transaction. Returns an `AssembledTransaction` object which will have a `result` field containing the result of the simulation. If this transaction changes contract state, you will need to call `signAndSend()` on the returned object.
+    */
+    setAdmin = async ({new_admin}: {new_admin: string}, options: {
+        /**
+         * The fee to pay for the transaction. Default: 100.
+         */
+        fee?: number,
+    } = {}) => {
+        return await AssembledTransaction.fromSimulation({
+            method: 'set_admin',
+            args: this.spec.funcArgsToScVals("set_admin", {new_admin: new Address(new_admin)}),
+            ...options,
+            ...this.options,
+            errorTypes: Errors,
+            parseResultXdr: this.parsers['setAdmin'],
+        });
+    }
+
+
         /**
     * Construct and simulate a set_fee transaction. Returns an `AssembledTransaction` object which will have a `result` field containing the result of the simulation. If this transaction changes contract state, you will need to call `signAndSend()` on the returned object.
     */

@@ -32,7 +32,7 @@ export type ClassOptions = {
    * @example
    * ```ts
    * import freighter from "@stellar/freighter-api";
-   * import { Contract } from "token_swap";
+   * import { Contract } from "token-swap";
    * const contract = new Contract({
    *   …,
    *   wallet: freighter,
