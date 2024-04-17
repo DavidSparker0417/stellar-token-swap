@@ -53,11 +53,11 @@ async function executeTransaction(accKeypair: StellarSdk.Keypair, operation: Ste
     const transaction = await server.prepareTransaction(transaction0);
     // transaction.sign(accKeypair);
     console.log(`[DAVID] Signing transaction for xdr:: ${transaction.toXDR()}`);
-    const txHash = await freighter.signTransaction(transaction.toXDR(), {
+    const txHash = await freighter.signTransaction(transaction.toEnvelope().toXDR("base64"), {
         networkPassphrase: StellarSdk.Networks.FUTURENET,
     });
     console.log(`[DAVID] txSignature = ${txHash}`);
-    transaction.addSignature(sourceAcc.accountId(), txHash);
+    transaction.addSignature(sourceAcc.accountId(),  txHash);
     console.log(`[DAVID] txHash = ${txHash}`);
     try {
         const response = await server.sendTransaction(transaction);
