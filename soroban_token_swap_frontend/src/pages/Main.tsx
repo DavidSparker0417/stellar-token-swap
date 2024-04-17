@@ -57,10 +57,9 @@ async function executeTransaction(accKeypair: StellarSdk.Keypair, operation: Ste
         networkPassphrase: StellarSdk.Networks.FUTURENET,
     });
     // const signature = "AAAAAgAAAACNj6RokCqI7lD9vPqDqSpSdRsWkBhz0JAmnYMOS5IQ+gACDVAAEUdSAAAAHQAAAAEAAAAAAAAAAAAAAABmH/8ZAAAAAQAAAAdUZXN0aW5nAAAAAAEAAAAAAAAAGAAAAAAAAAABhrqt6lL687vtrGqUgIbrDXsRagIgJoeoX740/8DpAV0AAAAHc2V0X2ZlZQAAAAACAAAAAwAAABkAAAASAAAAAAAAAADdHMMv9dP0nPm3npbOP1hK2e9LZj90+mupSpH46FPLgQAAAAAAAAABAAAAAAAAAAEAAAAH+giXrjInL8IwsaElhNDsibVZgVRqhbKcUXBMdjKQgA8AAAABAAAABgAAAAGGuq3qUvrzu+2sapSAhusNexFqAiAmh6hfvjT/wOkBXQAAABQAAAABAHWafQAAM2gAAAu8AAAAAAACDOwAAAABS5IQ+gAAAEAj7s6pKXrlQNxk5ciuMwq7nyWumikTqiJbn0o9rIgiR9tx0VLhVvuEwDlD5E5i8EBG1UtpirOpbJ3VSXpW6IAJ";
-    console.log(`[DAVID] siglen = ${signature.length}, txSignature = ${signature}`);
+    console.log(`[DAVID] txSignature = ${signature}`);
     // transaction.addSignature(sourceAcc.accountId(), signature);
-    transaction.signHashX(signature);
-    console.log(`[DAVID] txHash = ${signature}`);
+    // transaction.signHashX(signature);
     try {
         const response = await server.sendTransaction(transaction);
         console.log('Sent! Transaction Hash:', response.hash);
