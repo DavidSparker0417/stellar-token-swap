@@ -16,6 +16,9 @@ import freighter from "@stellar/freighter-api";
 const log = console.log;
 const rpc = "https://rpc-futurenet.stellar.org";
 const CONTRACT_ID = tswap.networks.futurenet.contractId;
+const OFFERING_TOKEN = "CDJ5OIGTEWQEZFNAQSGWF77JLY76SGEGEPZ7Z5KTNIDGKWKJMUDHF4JB";
+const REQ_TOKEN = "CCFAFZ4HAZOYIIM4EJHMNYBTJEIVJP22ZX5KBD52BK2OH7KJEQFA4RP2";
+const FEE_COLLECTOR = "GDORZQZP6XJ7JHHZW6PJNTR7LBFNT32LMY7XJ6TLVFFJD6HIKPFYCPTD";
 const tokenSwap = new tswap.Contract({
     contractId: CONTRACT_ID,
     networkPassphrase: tswap.networks.futurenet.networkPassphrase,
@@ -91,11 +94,11 @@ async function checkError() {
 
 function Main() {
     const [fee, setFee] = useState(0.25);
-    const [feeWallet, setFeeWallet] = useState("GDORZQZP6XJ7JHHZW6PJNTR7LBFNT32LMY7XJ6TLVFFJD6HIKPFYCPTD");
+    const [feeWallet, setFeeWallet] = useState(FEE_COLLECTOR);
     const [tokenId, setTokenId] = useState("");
 
-    const [offeredToken, setOfferedToken] = useState("CDJ5OIGTEWQEZFNAQSGWF77JLY76SGEGEPZ7Z5KTNIDGKWKJMUDHF4JB");
-    const [requestedToken, setRequestedToken] = useState("CCFAFZ4HAZOYIIM4EJHMNYBTJEIVJP22ZX5KBD52BK2OH7KJEQFA4RP2");
+    const [offeredToken, setOfferedToken] = useState(OFFERING_TOKEN);
+    const [requestedToken, setRequestedToken] = useState(REQ_TOKEN);
     const [offeredTokenAmount, setOfferedTokenAmount] = useState(5000000);
     const [requestedTokenAmount, setRequestedTokenAmount] = useState(500000);
     const [minRequestedTokenAmount,
