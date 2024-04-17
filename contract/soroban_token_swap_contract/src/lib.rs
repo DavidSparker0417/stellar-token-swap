@@ -25,7 +25,7 @@ pub struct TokenSwap;
 #[contractimpl]
 impl TokenSwap {
     pub fn initialize(e: Env, admin: Address) {
-        if !has_administrator(&e) {
+        if has_administrator(&e) {
             panic!("already initialized");
         }
         write_administrator(&e, &admin);
