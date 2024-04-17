@@ -1,6 +1,6 @@
 {
     "version": "0.0.0",
-    "name": "token-swap",
+    "name": "token_swap",
     "dependencies": {
         "@stellar/freighter-api": "1.7.1",
         "buffer": "6.0.3",
