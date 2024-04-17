@@ -22,9 +22,8 @@ const tokenSwap = new tswap.Contract({
     rpcUrl: rpc,
 });
 const server = new StellarSdk.SorobanRpc.Server(
-    // 'http://localhost:8000/soroban/rpc', 
-    // { allowHttp: true },
     rpc,
+    { allowHttp: true },
 );
 
 async function executeTransaction(operation: StellarSdk.xdr.Operation<StellarSdk.Operation.InvokeHostFunction>): Promise<number> {
