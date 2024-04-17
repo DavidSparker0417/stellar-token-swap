@@ -3,8 +3,7 @@ import './Main.css';
 // import { Connectivity, EditOfferInput } from './connectivity';
 import * as tswap from "token-swap";
 import * as StellarSdk from "@stellar/stellar-sdk";
-
-// import freighter from "@stellar/freighter-api";
+import freighter from "@stellar/freighter-api";
 
 // working around ESM compatibility issues
 // const {
@@ -40,8 +39,9 @@ const feeKeypair = StellarSdk.Keypair.fromSecret(feeSecretKey);
 
 
 async function executeTransaction(accKeypair: StellarSdk.Keypair, operation: StellarSdk.xdr.Operation<StellarSdk.Operation.InvokeHostFunction>): Promise<number> {
-    const sourceAcc = await server.getAccount(accKeypair.publicKey());
-    
+    // const sourceAcc = await server.getAccount(accKeypair.publicKey());
+    console.log(`[DAVID] executeTransaction:: ACC-KEYPAIRE=${accKeypair}`);
+    const sourceAcc = await server.getAccount(await freighter.getPublicKey());
     const transaction0 = new StellarSdk.TransactionBuilder(sourceAcc, {
         fee: StellarSdk.BASE_FEE,
         networkPassphrase: /* SorobanClient.Networks.STANDALONE */ StellarSdk.Networks.FUTURENET,
@@ -50,8 +50,15 @@ async function executeTransaction(accKeypair: StellarSdk.Keypair, operation: Ste
         .setTimeout(180)
         .build();
 
+    console.log(`[DAVID] NETWORK = ${JSON.stringify(await freighter.getNetworkDetails())}`);
     const transaction = await server.prepareTransaction(transaction0);
-    transaction.sign(accKeypair);
+    // transaction.sign(accKeypair);
+    const txHash = await freighter.signTransaction(transaction.toXDR(), {
+        network: "STANDALONE",
+        networkPassphrase: tswap.networks.futurenet.networkPassphrase,
+        accountToSign: sourceAcc.accountId(),
+    });
+    console.log(`[DAVID] txHash = ${txHash}`);
     try {
         const response = await server.sendTransaction(transaction);
         console.log('Sent! Transaction Hash:', response.hash);
